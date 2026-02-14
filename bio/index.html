@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NightSoftware</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Outfit', sans-serif;
+cursor:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">\
+<circle cx="12" cy="12" r="8" fill="white" opacity="0.9"/>\
+<circle cx="12" cy="12" r="6" fill="none" stroke="black" stroke-width="1"/>\
+</svg>') 12 12, auto !important;
+}
+
+body{
+background:black;
+overflow:hidden;
+color:white;
+cursor:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">\
+<circle cx="12" cy="12" r="8" fill="white" opacity="0.9"/>\
+<circle cx="12" cy="12" r="6" fill="none" stroke="black" stroke-width="1"/>\
+</svg>') 12 12, auto;
+}
+
+video{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-2;
+filter:brightness(0.7) blur(4px);
+}
+
+.ambient{
+position:fixed;
+inset:0;
+background:radial-gradient(circle at 20% 20%, rgba(255,0,100,0.25), transparent 40%),
+radial-gradient(circle at 80% 80%, rgba(0,100,255,0.25), transparent 40%);
+z-index:-1;
+}
+
+.profile{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:360px;
+padding:30px;
+border-radius:24px;
+background:rgba(20,20,25,0.6);
+backdrop-filter:blur(25px);
+box-shadow:0 0 60px rgba(0,0,0,0.8);
+text-align:center;
+transition:all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.avatar{
+width:90px;
+height:90px;
+border-radius:50%;
+margin:auto;
+background:url('https://i.pinimg.com/1200x/d1/6f/0b/d16f0be823f4490c19d8a2ccda8d98ed.jpg') center/cover;
+box-shadow:0 0 25px rgba(255,255,255,0.3);
+transition:transform 0.3s ease;
+}
+
+.avatar:hover{
+transform:scale(1.05);
+}
+
+.name{
+margin-top:16px;
+font-size:24px;
+font-weight:600;
+letter-spacing:1.5px;
+}
+
+.bio{
+margin-top:12px;
+font-size:13px;
+line-height:1.6;
+opacity:0.85;
+color:rgba(255,255,255,0.9);
+}
+
+.location{
+margin-top:16px;
+font-size:13px;
+opacity:0.7;
+}
+
+.volume-control{
+margin-top:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+}
+
+.volume-icon{
+width:20px;
+height:20px;
+opacity:0.9;
+}
+
+.volume-slider{
+width:140px;
+height:4px;
+-webkit-appearance:none;
+appearance:none;
+background:rgba(255,255,255,0.15);
+border-radius:10px;
+outline:none;
+transition:0.3s;
+cursor:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">\
+<circle cx="12" cy="12" r="8" fill="white" opacity="0.9"/>\
+<circle cx="12" cy="12" r="6" fill="none" stroke="black" stroke-width="1"/>\
+</svg>') 12 12, auto;
+}
+
+.volume-slider::-webkit-slider-thumb{
+-webkit-appearance:none;
+appearance:none;
+width:14px;
+height:14px;
+border-radius:50%;
+background:white;
+cursor:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">\
+<circle cx="12" cy="12" r="8" fill="white" opacity="0.9"/>\
+<circle cx="12" cy="12" r="6" fill="none" stroke="black" stroke-width="1"/>\
+</svg>') 12 12, auto;
+box-shadow:0 0 10px rgba(255,255,255,0.5);
+transition:0.3s;
+}
+
+.volume-slider::-webkit-slider-thumb:hover{
+transform:scale(1.2);
+box-shadow:0 0 15px rgba(255,255,255,0.8);
+}
+
+.volume-slider::-moz-range-thumb{
+width:14px;
+height:14px;
+border-radius:50%;
+background:white;
+cursor:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">\
+<circle cx="12" cy="12" r="8" fill="white" opacity="0.9"/>\
+<circle cx="12" cy="12" r="6" fill="none" stroke="black" stroke-width="1"/>\
+</svg>') 12 12, auto;
+border:none;
+box-shadow:0 0 10px rgba(255,255,255,0.5);
+transition:0.3s;
+}
+
+.volume-slider::-moz-range-thumb:hover{
+transform:scale(1.2);
+box-shadow:0 0 15px rgba(255,255,255,0.8);
+}
+
+.volume-value{
+font-size:12px;
+opacity:0.6;
+min-width:35px;
+text-align:right;
+}
+
+.links{
+margin-top:24px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.links a{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:12px 16px;
+border-radius:14px;
+background:rgba(255,255,255,0.06);
+text-decoration:none;
+color:white;
+font-size:14px;
+transition:0.3s;
+cursor:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">\
+<circle cx="12" cy="12" r="8" fill="white" opacity="0.9"/>\
+<circle cx="12" cy="12" r="6" fill="none" stroke="black" stroke-width="1"/>\
+</svg>') 12 12, auto;
+}
+
+.links a:hover{
+background:rgba(255,255,255,0.15);
+box-shadow:0 0 20px rgba(255,255,255,0.2);
+transform:translateX(4px);
+}
+
+.links img{
+width:22px;
+height:22px;
+border-radius:6px;
+}
+</style>
+</head>
+<body>
+
+<video autoplay muted loop playsinline>
+<source src="video.mp4" type="video/mp4">
+</video>
+
+<div class="ambient"></div>
+
+<audio id="music" src="music.mp3" loop autoplay muted></audio>
+
+<div class="profile">
+
+<div class="avatar"></div>
+
+<div class="name">NightSoftware</div>
+
+<div class="bio">Software Developer & Cheat Creator</div>
+
+<div class="location">Germany</div>
+
+<div class="volume-control">
+<img src="https://cdn3.emoji.gg/emojis/1712-listeningtomusic.png" class="volume-icon" alt="Music">
+<input type="range" class="volume-slider" min="0" max="100" value="100" id="volumeSlider">
+<span class="volume-value" id="volumeValue">100%</span>
+</div>
+
+<div class="links">
+
+<a href="https://cheatglobal.com/members/nightsoftware0.400258/" target="_blank">
+<div style="display:flex;align-items:center;gap:10px;">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlEt6jzD27KdS3Os4SYIVn1TGEKkjdCo1meQ&s">
+CheatGlobal
+</div>
+<span>→</span>
+</a>
+
+<a href="https://discord.com" target="_blank">
+<div style="display:flex;align-items:center;gap:10px;">
+<img src="https://i.pinimg.com/736x/34/91/f3/3491f3e50ab6a4d51a348f9cc2419842.jpg">
+Discord
+</div>
+<span>→</span>
+</a>
+
+<a href="https://www.tiktok.com/@nightsoftware0" target="_blank">
+<div style="display:flex;align-items:center;gap:10px;">
+<img src="https://img.pixers.pics/pho(s3:700/PI/54/88/85/48/91/700_PI5488854891_fd892e1ebe755b56602e9f6421f22762_5f9fed4c9f302_.,700,700,jpg)/cikartmalar-tiktok-vektor-logosu.jpg.jpg">
+TikTok
+</div>
+<span>→</span>
+</a>
+
+</div>
+</div>
+
+<script>
+const music = document.getElementById("music");
+const volumeSlider = document.getElementById("volumeSlider");
+const volumeValue = document.getElementById("volumeValue");
+const profile = document.querySelector(".profile");
+
+let musicStarted = false;
+
+function startMusic() {
+    if (!musicStarted) {
+        music.muted = false;
+        music.volume = 1.0;
+        music.play().then(() => {
+            musicStarted = true;
+        }).catch(() => {});
+    }
+}
+
+startMusic();
+window.addEventListener('load', startMusic);
+
+['click', 'touchstart', 'keydown', 'mousemove', 'scroll'].forEach(event => {
+    document.addEventListener(event, startMusic);
+});
+
+volumeSlider.addEventListener('input', (e) => {
+    const value = e.target.value;
+    music.volume = value / 100;
+    volumeValue.textContent = value + '%';
+});
+
+document.addEventListener('mousemove', (e) => {
+    const rect = profile.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    
+    const deltaX = (mouseX - centerX) / window.innerWidth;
+    const deltaY = (mouseY - centerY) / window.innerHeight;
+    
+    const rotateY = deltaX * 8;
+    const rotateX = -deltaY * 8;
+    
+    profile.style.transform = `translate(-50%, -50%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+});
+
+profile.addEventListener('mouseleave', () => {
+    profile.style.transform = 'translate(-50%, -50%) rotateX(0deg) rotateY(0deg)';
+});
+</script>
+
+</body>
+</html>
